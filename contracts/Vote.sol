@@ -33,13 +33,14 @@ contract VoteSystem {
             description: _description,
             counterPosition0: 0,
             counterPosition1: 0,
-            time: _time
+            time: block.timestamp + _time
         });
 
         emit CreateVote(_position0, _position1);
     }
 
     function vote(uint256 _voteId, uint256 _position) external {
+        require(votes[_voteId].time >= block.timestamp, "The vote is finished");
         require(!usersVote[_voteId][msg.sender], "The user already voted");
         require(_voteId <= counter, "vote id is not valid");
         require(_position <= 1, "position is not valid");
